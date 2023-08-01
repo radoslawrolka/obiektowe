@@ -1,7 +1,5 @@
 package agh.ics.oop;
 
-import java.util.LinkedList;
-
 public class World {
     public static void main(String[] args) {
         System.out.println("system wystartował");
@@ -10,24 +8,16 @@ public class World {
             System.out.print(arg + " ");
         }
         System.out.println();
-        LinkedList<MoveDirection> directions = new OptionParser().parse(args);
 
-        Animal animal = new Animal();
-        System.out.println(animal);
-        run(directions, animal);
-        System.out.println(animal);
+
+        MoveDirection[] directions = new OptionParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        System.out.println(map);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+        System.out.println(map);
 
         System.out.println("system zakończył działanie");
-    }
-
-    public static void run(LinkedList<MoveDirection> directions, Animal animal) {
-        for (MoveDirection direction : directions) {
-            switch (direction) {
-                case FORWARD -> animal.move(MoveDirection.FORWARD);
-                case BACKWARD -> animal.move(MoveDirection.BACKWARD);
-                case RIGHT -> animal.move(MoveDirection.RIGHT);
-                case LEFT -> animal.move(MoveDirection.LEFT);
-            }
-        }
     }
 }
