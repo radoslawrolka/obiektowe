@@ -1,1 +1,1 @@
-# obiektowe
+# Programowanie obiektowe AGH
