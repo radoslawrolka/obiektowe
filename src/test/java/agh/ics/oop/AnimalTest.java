@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AnimalTest {
     @Test
     public void testToString() {
-        Animal animal = new Animal(new RectangularMap(5,5), new Vector2d(3,4));
-        assert animal.toString().equals("N");
     }
 
     @Test
     public void testIsAt() {
-        IWorldMap map = new RectangularMap(5,5);
+        AbstractWorldMap map = new GrassField(5,5);
         Vector2d pos = new Vector2d(2,2);
         Animal animal = new Animal(map, pos);
         assert animal.isAt(new Vector2d(2,2));

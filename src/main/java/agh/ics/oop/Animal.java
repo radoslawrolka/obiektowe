@@ -1,13 +1,18 @@
 package agh.ics.oop;
 
-public class Animal implements IMapElement{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Animal implements IMapElement {
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position;
     private final AbstractWorldMap map;
+    private final List<IPositionChangeObserver> observers = new ArrayList<>();
 
     public Animal(AbstractWorldMap map, Vector2d initialPosition){
         this.map = map;
         this.position = initialPosition;
+        this.addObserver(map);
     }
 
     @Override
@@ -18,6 +23,20 @@ public class Animal implements IMapElement{
             case SOUTH -> "S";
             case WEST -> "W";
         };
+    }
+
+    public void addObserver(IPositionChangeObserver observer){
+        this.observers.add(observer);
+    }
+
+    public void removeObserver(IPositionChangeObserver observer){
+        this.observers.remove(observer);
+    }
+
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for( IPositionChangeObserver observer: this.observers ){
+            observer.positionChanged(oldPosition, newPosition);
+        }
     }
 
     public boolean isAt(Vector2d position){
@@ -37,6 +56,7 @@ public class Animal implements IMapElement{
                 }
                 Vector2d newPosition = this.position.add(unitVector);
                 if (this.map.canMoveTo(newPosition)) {
+                    this.positionChanged(this.position, newPosition);
                     if (map.objectAt(newPosition) instanceof Grass) {
                         ((GrassField) map).RespawnGrass(newPosition);
                     }

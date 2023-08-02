@@ -12,7 +12,9 @@ public class GrassField extends AbstractWorldMap {
         this.grassNumber = grassNumber;
         this.grassMaxSpawn = (int) Math.sqrt(10 * this.grassNumber);
         Random random = new Random();
-        elements.add(new Grass(new Vector2d(3, 3)));
+
+        //elements.put(new Vector2d(1,1), new Grass(new Vector2d(1,1)));
+
         int i=0;
         while (i < this.grassNumber) {
             int x = random.nextInt(this.grassMaxSpawn);
@@ -26,19 +28,19 @@ public class GrassField extends AbstractWorldMap {
                 }
             }
             if (!flag) {
-                this.elements.add(new Grass(new Vector2d(x, y)));
+                elements.put(new Vector2d(x, y), new Grass(new Vector2d(x, y)));
                 i++;
             }
         }
     }
 
     public void RespawnGrass(Vector2d position) {
-        elements.remove(objectAt(position));
+        elements.remove(position);
         int[][] epsilon = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1,-1}, {1, 0}, {1, 1}};
         for (int[] e: epsilon) {
             Vector2d newPosition = position.add(new Vector2d(e[0], e[1]));
             if (!(isOccupied(newPosition))) {
-                elements.add(new Grass(newPosition));
+                elements.put(newPosition, new Grass(newPosition));
                 break;
             }
         }
