@@ -1,11 +1,11 @@
 package agh.ics.oop;
 
-public class Animal {
+public class Animal implements IMapElement{
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position;
-    private final IWorldMap map;
+    private final AbstractWorldMap map;
 
-    public Animal(IWorldMap map, Vector2d initialPosition){
+    public Animal(AbstractWorldMap map, Vector2d initialPosition){
         this.map = map;
         this.position = initialPosition;
     }
@@ -37,6 +37,9 @@ public class Animal {
                 }
                 Vector2d newPosition = this.position.add(unitVector);
                 if (this.map.canMoveTo(newPosition)) {
+                    if (map.objectAt(newPosition) instanceof Grass) {
+                        ((GrassField) map).RespawnGrass(newPosition);
+                    }
                     this.position = newPosition;
                 }
             }
