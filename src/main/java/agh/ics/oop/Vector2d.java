@@ -51,4 +51,7 @@ public class Vector2d {
 
     @Override
     public int hashCode() {return ((int)(2137 * (long)x + (long)y));}
+
+    public int getX() {return this.x;}
+    public int getY() {return this.y;}
 }

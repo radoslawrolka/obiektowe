@@ -56,10 +56,10 @@ public class Animal implements IMapElement {
                 }
                 Vector2d newPosition = this.position.add(unitVector);
                 if (this.map.canMoveTo(newPosition)) {
-                    this.positionChanged(this.position, newPosition);
                     if (map.objectAt(newPosition) instanceof Grass) {
                         ((GrassField) map).RespawnGrass(newPosition);
                     }
+                    this.positionChanged(this.position, newPosition);
                     this.position = newPosition;
                 }
             }

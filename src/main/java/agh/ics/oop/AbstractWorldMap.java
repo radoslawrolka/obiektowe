@@ -8,6 +8,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Vector2d upperRight = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
     protected Map<Vector2d, IMapElement> elements = new HashMap<>();
     protected final MapVisualizer visualiser = new MapVisualizer(this);
+    protected MapBonduary mapBonduary = new MapBonduary();
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -18,6 +19,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition())) {
             elements.put(animal.getPosition(), animal);
+            mapBonduary.update(animal.getPosition());
             return true;
         }
         return false;
@@ -39,17 +41,20 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         IMapElement element = elements.get(oldPosition);
         elements.remove(oldPosition);
         elements.put(newPosition, element);
+        this.mapBonduary.positionChanged(oldPosition, newPosition);
     }
 
     @Override
     public String toString() {
-        Vector2d bottom = new Vector2d(upperRight.x, upperRight.y);
-        Vector2d top = new Vector2d(lowerLeft.x, lowerLeft.y);
-
-        for (Vector2d position: elements.keySet()) {
-            bottom = bottom.lowerLeft(position);
-            top = top.upperRight(position);
-        }
-        return visualiser.draw(bottom, top);
+        return visualiser.draw(mapBonduary.getLowerLeft(), mapBonduary.getUpperRight());
     }
+
+    public Vector2d getMapLowerLeft() {
+        return this.mapBonduary.getLowerLeft();
+    }
+
+    public Vector2d getMapUpperRight() {
+        return mapBonduary.getUpperRight();
+    }
+
 }

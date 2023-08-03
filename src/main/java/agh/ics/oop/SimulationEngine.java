@@ -15,7 +15,9 @@ public class SimulationEngine implements IEngine {
         for (Vector2d initialPosition: initialPositions) {
             Animal animal = new Animal(map, initialPosition);
             animals.add(animal);
-            map.place(animal);
+            if (!map.place(animal)) {
+                throw new IllegalArgumentException("Cannot place another animal at " + animal.getPosition());
+            }
         }
     }
 
