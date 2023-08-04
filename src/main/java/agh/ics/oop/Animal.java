@@ -67,6 +67,16 @@ public class Animal implements IMapElement {
             case LEFT -> this.orientation = this.orientation.previous();
         }
     }
+
+    @Override
+    public String getImagePath(){
+        return switch (orientation) {
+            case NORTH -> "n";
+            case EAST -> "r";
+            case SOUTH -> "s";
+            case WEST -> "l";
+        };
+    }
 }
 
 

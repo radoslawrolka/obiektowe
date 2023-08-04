@@ -27,7 +27,10 @@ public class MapBonduary implements IPositionChangeObserver {
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        remove(oldPosition);
-        update(newPosition);
+        System.out.println(oldPosition);
+        X.remove(oldPosition);
+        Y.remove(oldPosition);
+        X.add(newPosition);
+        Y.add(newPosition);
     }
 }

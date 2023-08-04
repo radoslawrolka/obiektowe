@@ -32,16 +32,17 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     @Override
-    public Object objectAt(Vector2d position) {
+    public IMapElement objectAt(Vector2d position) {
         return elements.get(position);
     }
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
         IMapElement element = elements.get(oldPosition);
+        this.mapBonduary.positionChanged(oldPosition, newPosition);
         elements.remove(oldPosition);
         elements.put(newPosition, element);
-        this.mapBonduary.positionChanged(oldPosition, newPosition);
+
     }
 
     @Override
