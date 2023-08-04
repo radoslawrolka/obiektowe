@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     private AbstractWorldMap map;
+    private IEngine engine;
     private int xMin;
     private int yMin;
     private int xMax;
@@ -37,10 +38,11 @@ public class App extends Application {
     private final int height = 50;
     private MoveDirection[] directions;
     private Vector2d[] positions;
-    private static GridPane gridPane = new GridPane();
+    private GridPane gridPane = new GridPane();
 
     public void init() {
-        String[] args = getParameters().getRaw().toArray(new String[0]);
+        //String[] args = getParameters().getRaw().toArray(new String[0]);
+        String[] args = {"f", "f"};
         try {
             directions = new OptionParser().parse(args);
             positions = new Vector2d[]{new Vector2d(2, 2), new Vector2d(3, 4)};
@@ -124,6 +126,19 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("GridPane Experiment");
 
+        Button newgame = new Button("New Game");
+        HBox hbox2 = new HBox(newgame);
+        newgame.setOnAction(event -> {
+            Stage newGame = new Stage();
+            App nextGame = new App();
+            try {
+                nextGame.init();
+                nextGame.start(newGame);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         Button button = new Button("Start");
         TextField textField = new TextField();
         HBox hbox = new HBox(textField, button);
@@ -131,13 +146,13 @@ public class App extends Application {
         button.setOnAction(event -> {
             String[] args = textField.getText().split(" ");
             directions = new OptionParser().parse(args);
-            IEngine engine = new SimulationEngine(directions, map, positions,2000, this);
+            engine = new SimulationEngine(directions, map, positions,2000, this);
             Thread thread = new Thread((Runnable) engine);
             thread.start();
         });
 
         prepareScene();
-        VBox mapAndButtons = new VBox(hbox, gridPane);
+        VBox mapAndButtons = new VBox(hbox, hbox2, gridPane);
 
         Scene scene = new Scene(mapAndButtons,600,600);
         primaryStage.setScene(scene);
